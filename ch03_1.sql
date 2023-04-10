@@ -1,29 +1,48 @@
-/* µµ¼­ ¹øÈ£°¡ 1ÀÎ µµ¼­ÀÇ ÀÌ¸§ */
+/* ë„ì„œ ë²ˆí˜¸ê°€ 1ì¸ ë„ì„œì˜ ì´ë¦„ */
 SELECT bookname
 FROM book
 WHERE bookid = 1;
 
-/* °¡°İÀÌ 20,000¿ø ÀÌ»óÀÎ µµ¼­ÀÇ ÀÌ¸§ */
+/* ê°€ê²©ì´ 20,000ì› ì´ìƒì¸ ë„ì„œì˜ ì´ë¦„ */
 SELECT bookname
 FROM book
 WHERE price >= 20000;
 
-/* ¹ÚÁö¼ºÀÇ ÃÑ±¸¸Å¾× */
+/* ë°•ì§€ì„±ì˜ ì´êµ¬ë§¤ì•¡ */
 SELECT SUM(saleprice)
 FROM orders
 WHERE custid = 1;
 
-/* ¹ÚÁö¼ºÀÇ ÃÑ±¸¸Å¾×2 */
+/* ë°•ì§€ì„±ì˜ ì´êµ¬ë§¤ì•¡2 */
 SELECT SUM(saleprice)
 FROM customer, orders
-WHERE customer.custid = orders.custid AND customer.name LIKE '¹ÚÁö¼º';
+WHERE customer.custid = orders.custid AND customer.name LIKE 'ë°•ì§€ì„±';
 
-/* ¹ÚÁö¼ºÀÌ ±¸¸ÅÇÑ µµ¼­ÀÇ ¼ö */
+/* ë°•ì§€ì„±ì´ êµ¬ë§¤í•œ ë„ì„œì˜ ìˆ˜ */
 SELECT COUNT(*)
 FROM customer, orders
-WHERE orders.custid = customer.custid AND customer.name LIKE '¹ÚÁö¼º';
+WHERE orders.custid = customer.custid AND customer.name LIKE 'ë°•ì§€ì„±';
 
-/* ¹ÚÁö¼ºÀÌ ±¸¸ÅÇÑ µµ¼­ÀÇ ÃâÆÇ»ç ¼ö */
+/* ë°•ì§€ì„±ì´ êµ¬ë§¤í•œ ë„ì„œì˜ ì¶œíŒì‚¬ ìˆ˜ */
 SELECT COUNT(publisher)
 FROM book, customer, orders
-WHERE book.bookid = orders.bookid AND customer.custid = orders.custid AND customer.name LIKE '¹ÚÁö¼º';
+WHERE book.bookid = orders.bookid AND customer.custid = orders.custid AND customer.name LIKE 'ë°•ì§€ì„±';
+
+/*01 - 5 ë°•ì§€ì„±ì´ êµ¬ë§¤í•œ ë„ì„œì˜ ì¶œíŒì‚¬ ìˆ˜*/
+SELECT COUNT(distinct publisher)
+FROM customer, book, orders
+WHERE customer.custid = orders.custid AND orders.bookid = book.bookid AND customer.name LIKE 'ë°•ì§€ì„±';
+
+/*01 - 6 ë°•ì§€ì„±ì´ êµ¬ë§¤í•œ ë„ì„œì˜ ì´ë¦„, ê°€ê²©, ì •ê°€ì™€ íŒë§¤ê°€ê²©ì˜ ì°¨ì´ */
+SELECT bookname, price, price-saleprice
+FROM customer, book, orders
+WHERE customer.custid = orders.custid AND orders.bookid = book.bookid AND customer.name LIKE 'ë°•ì§€ì„±';
+
+/*01 - 7 ë°•ì§€ì„±ì´ êµ¬ë§¤í•˜ì§€ ì•Šì€ ë„ì„œì˜ ì´ë¦„ */
+SELECT bookname
+FROM book
+WHERE NOT EXISTS (
+    SELECT bookname
+    FROM customer, orders
+    WHERE customer.custid = orders.custid AND orders.bookid = book.bookid AND customer.name LIKE 'ë°•ì§€ì„±'
+);
