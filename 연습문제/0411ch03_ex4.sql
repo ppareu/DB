@@ -20,3 +20,4 @@ ALTER TABLE Bookcompany ADD webaddress VARCHAR(30);
 
 --(7)
 INSERT INTO Bookcompany VALUES (‘한빛아카데미’, ‘서울시 마포구’, 1993-01-01, ‘http://hanbit.co.kr’);
+SELECT * FROM Bookcompany;
